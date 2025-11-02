@@ -1,6 +1,6 @@
 # PGall  
 
-개발자인 척하는 모기들이 하도 많아서 만든 레포입니다.
+갤에 개발자인 척하는 모기들이 하도 많아서 만든 레포입니다.
 기여도를 통해 누가 진짜 실력자인지 가려봅시다.
 
 방법은 간단합니다.
@@ -23,19 +23,35 @@ PGall/
 ├── libs/               # 📚 공통 라이브러리
 │   ├── js/             #   JavaScript/TypeScript 라이브러리
 │   ├── py/             #   Python 라이브러리
-│   └── rust/           #   Rust 라이브러리
+│   ├── rust/           #   Rust 라이브러리
 ├── plugins/            # 🔌 플러그인 (기여자들이 만든 프로젝트)
 │   └── smart-cctv/     #   예시: 스마트 CCTV 시스템
-└── docs/               # 📖 문서
+└── docs/               # 📖 문서들
 ```
 
-### 작동 원리
+## 🚀 런쳐 실행 방법
 
-1. **플러그인 기여**: `plugins/` 디렉토리에 새 프로젝트 추가
-2. **플러그인 명세**: 각 플러그인은 `plugin.json`으로 메타데이터 정의
-3. **런처 실행**: `launchers/pgall-web`이나 `pgall-cli` 실행  
-4. **플러그인 검색**: 런처가 `plugins/` 하위의 모든 `plugin.json` 스캔
-5. **원클릭 실행**: UI에서 버튼 클릭으로 플러그인 설치/빌드/실행
+PGall 런처를 통해 모든 플러그인들을 쉽게 실행할 수 있습니다.
+
+### CLI 런처 실행
+```bash
+cd launchers/pgall-cli
+
+# 가상환경 생성 및 활성화
+python3 -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# 의존성 설치
+python3 -m pip install -r requirements.txt
+
+# 대화형 모드 실행 (화살표 키로 메뉴 선택)
+python3 main.py
+
+# 또는 명령어 플래그 사용
+python3 main.py --help              # 도움말
+```
+
+자세한 사용법은 [launchers/README.md](./launchers/README.md)를 참고하세요.
 
 ### 프로젝트 복잡도 정의
 
@@ -82,7 +98,6 @@ PGall/
 
 ---
 ✅ 제출 기준 / 요구 스펙
-공통
 README (문제 → 해결 → 실행 방법 + 간단한 구조 설명)
 실행 결과 증빙 (영상/GIF/스크린샷)
 
