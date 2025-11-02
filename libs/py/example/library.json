@@ -1,0 +1,8 @@
+{
+  "name": "example-utils",
+  "description": "PGall의 라이브러리 시스템을 시연하기 위한 예제 라이브러리입니다.",
+  "authors": ["besa"],
+  "version": "0.1.0",
+  "language": "python",
+  "tags": ["example", "utility"]
+}
