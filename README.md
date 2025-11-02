@@ -37,21 +37,23 @@ PGall 런처를 통해 모든 플러그인들을 쉽게 실행할 수 있습니�
 ```bash
 cd launchers/pgall-cli
 
-# 가상환경 생성 및 활성화
+# 가상환경 생성 및 활성화 & 의존성 설치=
 python3 -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
-
-# 의존성 설치
 python3 -m pip install -r requirements.txt
 
-# 대화형 모드 실행 (화살표 키로 메뉴 선택)
+# 대화형 모드 실행 (키보드 단축키 지원) L=목록, R=실행, Q/ESC=종료, ↑↓=이동, Enter/→=선택, ←=뒤로
 python3 main.py
 
 # 또는 명령어 플래그 사용
 python3 main.py --help              # 도움말
 ```
 
-자세한 사용법은 [launchers/README.md](./launchers/README.md)를 참고하세요.
+**실행 화면 예시:**
+
+![CLI 런처 실행 화면](./launchers/assets/1_cli_start.png)
+
+자세한 사용법과 더 많은 스크린샷은 [launchers/README.md](./launchers/README.md)를 참고하세요.
 
 ### 프로젝트 복잡도 정의
 

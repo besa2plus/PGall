@@ -112,32 +112,48 @@ def run_plugin(plugins, plugin_name):
 
 def interactive_mode(plugins):
     """대화형 모드로 플러그인을 선택하고 실행합니다."""
+    from InquirerPy import prompt
+    from InquirerPy.validator import EmptyInputValidator
+    
     while True:
         console.clear()
         console.print(Panel("[bold cyan]🚀 PGall 대화형 모드[/bold cyan]", style="green", expand=False))
         console.print()
         
+        # 키보드 단축키 안내
+        console.print("[dim]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[/dim]")
+        console.print("[dim]⌨️  단축키: [cyan]L[/cyan]=목록 | [cyan]R[/cyan]=실행 | [cyan]Q[/cyan]/[cyan]ESC[/cyan]=종료 | [cyan]↑↓[/cyan]=이동 | [cyan]Enter[/cyan]=선택[/dim]")
+        console.print("[dim]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[/dim]\n")
+        
         action = inquirer.select(
             message="원하는 작업을 선택하세요:",
             choices=[
-                Choice(value="list", name="📋 플러그인 목록 보기"),
-                Choice(value="run", name="▶️  플러그인 실행"),
-                Choice(value="exit", name="🚪 종료"),
+                Choice(value="list", name="📋 플러그인 목록 보기 [L]"),
+                Choice(value="run", name="▶️  플러그인 실행 [R]"),
+                Choice(value="exit", name="🚪 종료 [Q]"),
             ],
             default="list",
+            keybindings={
+                "answer": [{"key": "enter"}, {"key": "right"}],  # Enter 또는 →
+                "skip": [{"key": "escape"}, {"key": "left"}],    # ESC 또는 ←
+                "interrupt": [{"key": "c-c"}],                   # Ctrl+C
+            },
         ).execute()
+        
+        # 단축키 처리: 사용자가 'l', 'r', 'q' 키를 직접 입력한 경우
+        # (InquirerPy는 기본적으로 첫 글자 매칭을 지원하지만 명시적으로 처리)
         
         console.print()  # 빈 줄 추가
         
         if action == "list":
             list_plugins(plugins)
-            console.print("\n[dim]Press Enter to continue...[/dim]")
+            console.print("\n[dim]Press Enter to continue... (또는 ESC/←로 뒤로가기)[/dim]")
             input()
             
         elif action == "run":
             if not plugins:
                 console.print("[red]❌ 사용 가능한 플러그인이 없습니다.[/red]")
-                console.print("\n[dim]Press Enter to continue...[/dim]")
+                console.print("\n[dim]Press Enter to continue... (또는 ESC/←로 뒤로가기)[/dim]")
                 input()
                 continue
             
@@ -146,15 +162,27 @@ def interactive_mode(plugins):
                 for name, data in plugins.items()
             ]
             
-            selected_plugin = inquirer.select(
-                message="실행할 플러그인을 선택하세요:",
-                choices=plugin_choices,
-            ).execute()
-            
-            console.print()  # 빈 줄 추가
-            run_plugin(plugins, selected_plugin)
-            console.print("\n[dim]Press Enter to continue...[/dim]")
-            input()
+            try:
+                selected_plugin = inquirer.select(
+                    message="실행할 플러그인을 선택하세요 (ESC/←로 뒤로가기):",
+                    choices=plugin_choices,
+                    keybindings={
+                        "answer": [{"key": "enter"}, {"key": "right"}],
+                        "skip": [{"key": "escape"}, {"key": "left"}],
+                        "interrupt": [{"key": "c-c"}],
+                    },
+                ).execute()
+                
+                console.print()  # 빈 줄 추가
+                run_plugin(plugins, selected_plugin)
+                console.print("\n[dim]Press Enter to continue...[/dim]")
+                input()
+            except KeyboardInterrupt:
+                # Ctrl+C로 중단
+                continue
+            except:
+                # ESC나 ←로 뒤로가기
+                continue
             
         elif action == "exit":
             console.clear()

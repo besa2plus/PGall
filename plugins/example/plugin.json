@@ -8,10 +8,10 @@
   "tags": ["example", "demo"],
   "dependencies": {
     "libs": ["py/example"],
-    "external": []
+    "external": ["colorama>=0.4.6"]
   },
   "scripts": {
-    "install": "",
+    "install": "pip install -r requirements.txt",
     "start": "python main.py"
   }
 }
