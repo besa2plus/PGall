@@ -12,35 +12,43 @@ mkdir my-awesome-plugin
 cd my-awesome-plugin/
 ```
 
-### 2. 플러그인 명세 파일 생성
+### 2. 플러그인 규약: 표준 스크립트
 
-각 플러그인은 반드시 `plugin.json` 파일을 포함해야 합니다. 이 파일을 통해 PGall 런처가 플러그인을 인식하고 실행할 수 있습니다.
+PGall은 **표준 스크립트 파일**을 사용하여 플러그인을 실행합니다. 이를 통해 개발자는 완전한 자율성을 가지며, 런처는 단순하고 예측 가능하게 동작합니다.
+
+**필수 파일:**
+- `plugin.json`: 플러그인 메타데이터
+- `run.sh` (또는 `run.bat`): 플러그인 실행 스크립트
+
+**선택 파일:**
+- `install.sh` (또는 `install.bat`): 의존성 설치 스크립트
+
+**권장 구조:**
+```
+my-plugin/
+├── plugin.json       # (아래 예시 참고)
+├── install.sh       # (선택) 의존성 설치
+├── run.sh           # (필수) 플러그인 실행
+├── README.md
+└── ... (소스 코드, 의존성 파일 등)
+```
 
 #### `plugin.json` 명세
-
-**필수 필드:**
+`plugin.json`에는 순수한 메타데이터만 담습니다.
 
 - `name` (string): 플러그인 이름
 - `description` (string): 플러그인 설명
 - `authors` (string[]): 제작자 목록
-- `version` (string): 플러그인 버전 (예: "0.1.0")
+- `version` (string): 플러그인 버전
 - `level` (string): 프로젝트 복잡도 (`function`, `service`, `production`)
-- `language` (string): 주 사용 언어 (예: "python", "javascript", "rust")
-- `scripts` (object): 런처가 호출할 명령어
-  - `install` (string): 의존성 설치 명령어
-  - `start` (string): 실행 명령어
-  - `build` (string, 선택사항): 빌드 명령어 (필요시에만)
-
-**선택 필드:**
-
+- `language` (string): 주 사용 언어
 - `tags` (string[]): 카테고리/검색용 태그
-- `dependencies` (object): 의존성 정보
-  - `libs` (string[]): PGall 내부 라이브러리 의존성
-  - `external` (string[]): 외부 패키지 의존성
-- `repository` (string): 원본 저장소 URL (외부에서 가져온 경우)
+- `platforms` (object): 지원하는 OS 정보
+  - `windows` (string): "supported" | "unsupported"
+  - `macos` (string): "supported" | "unsupported"
+  - `linux` (string): "supported" | "unsupported"
 
-#### 예시 `plugin.json`
-
+**예시 `plugin.json`:**
 ```json
 {
   "name": "이미지 리사이저",
@@ -50,56 +58,46 @@ cd my-awesome-plugin/
   "level": "function",
   "language": "python",
   "tags": ["image", "resize", "batch"],
-  "dependencies": {
-    "external": ["pillow", "click"]
-  },
-  "scripts": {
-    "install": "pip install -r requirements.txt",
-    "start": "python main.py"
+  "platforms": {
+    "windows": "supported",
+    "macos": "supported",
+    "linux": "supported"
   }
 }
 ```
 
-### 3. 프로젝트 복잡도별 가이드
+### 3. 스크립트 작성 가이드
 
-#### Function (기능 수준)
-- **범위**: 단일 기능의 스크립트
-- **예시**: 파일 변환기, 데이터 처리 스크립트
-- **권장 구조**:
-  ```
-  my-function/
-  ├── plugin.json
-  ├── main.py (또는 main.js, main.rs 등)
-  ├── requirements.txt (의존성)
-  └── README.md
-  ```
-
-#### Service (서비스 수준)
-- **범위**: 웹 UI가 있는 도구나 서비스
-- **예시**: 이미지 자동 정리기, 릴리즈 노트 자동화
-- **권장 구조**:
-  ```
-  my-service/
-  ├── plugin.json
-  ├── src/
-  ├── static/ (웹 UI가 있는 경우)
-  ├── requirements.txt
-  └── README.md
+#### `install.sh` (의존성 설치)
+- 이 스크립트는 런처가 플러그인을 실행하기 전에 **한 번** 호출합니다.
+- 예시 (`requirements.txt` 사용):
+  ```bash
+  #!/bin/bash
+  set -e
+  
+  # 가상환경 생성 및 의존성 설치
+  python3 -m venv .venv
+  .venv/bin/pip install -r requirements.txt
   ```
 
-#### Production (프로덕션 수준)
-- **범위**: 완전한 시스템, 지속 운영 가능한 프로덕트
-- **예시**: 스마트 CCTV, ERP 시스템
-- **권장 구조**:
+#### `run.sh` (플러그인 실행)
+- 이 스크립트는 플러그인을 실제로 실행하는 로직을 담습니다.
+- 예시 (Python 가상환경):
+  ```bash
+  #!/bin/bash
+  set -e
+
+  # 가상환경 활성화 및 메인 스크립트 실행
+  source .venv/bin/activate
+  python main.py
   ```
-  my-production/
-  ├── plugin.json
-  ├── backend/
-  ├── frontend/
-  ├── docker-compose.yml
-  ├── docs/
-  └── README.md
+- 예시 (Docker):
+  ```bash
+  #!/bin/bash
+  docker-compose up
   ```
+
+> **Windows 사용자**: `.sh` 파일 대신 `.bat` 파일을 생성할 수 있습니다. 런처는 OS에 맞는 파일을 우선적으로 실행합니다. (예: `run.bat` > `run.sh`)
 
 ### 4. 필수 요구사항
 

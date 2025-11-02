@@ -1,17 +1,14 @@
 {
   "name": "Example_Plugin",
-  "description": "라이브러리를 어떻게 사용하는지 보여주는 예제 플러그인입니다.",
+  "description": "라이브러리를 어떻게 사용하는지 보여주기 위한 예제 플러그인입니다.",
   "authors": ["besa"],
   "version": "1.0.0",
   "level": "function",
   "language": "python",
   "tags": ["example", "demo"],
-  "dependencies": {
-    "libs": ["py/example"],
-    "external": ["colorama>=0.4.6"]
-  },
-  "scripts": {
-    "install": "pip install -r requirements.txt",
-    "start": "python main.py"
+  "platforms": {
+    "windows": "supported",
+    "macos": "supported",
+    "linux": "supported"
   }
 }

@@ -22,8 +22,11 @@ PGall에서 플러그인이 어떻게 작동하고, 어떻게 라이브러리를
 # launchers/pgall-cli 디렉토리로 이동
 cd ../../launchers/pgall-cli
 
-# "Example Plugin" 실행
-python main.py run "Example Plugin"
+# 대화형 모드에서 실행하거나,
+python3 main.py
+
+# -r 플래그를 사용하여 직접 실행
+python3 main.py -r "Example_Plugin"
 ```
 
 ### 예상 출력 결과
