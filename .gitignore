@@ -1,0 +1,76 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+
+# Env / Secrets
+.env
+.env.*
+*.key
+*.pem
+secrets/
+
+
+### python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+pip-wheel-metadata/
+
+
+### node
+node_modules/
+dist/
+build/
+.next/
+out/
+*.cache/
+pnpm-lock.yaml
+yarn.lock
+
+
+### Rust
+target/
+Cargo.lock
+
+### java
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+.gradle/
+build/
+
+# cursor
+.cursor/
+*.mdc
+
+### Misk
+# Binary outputs (도구 실행 결과)
+*.exe
+*.out
+*.bin
+*.dll
+*.so
+*.dylib
+
+# Temp
+tmp/
+temp/
+cache/
+test/
+
+# Tool outputs
+outputs/
+workspace/
